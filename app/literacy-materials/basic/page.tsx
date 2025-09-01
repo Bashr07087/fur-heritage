@@ -1,37 +1,42 @@
+"use client"
 import { Header } from "@/components/header"
-import { ChevronRight, Volume2, Download, CheckCircle } from "lucide-react"
+import { ChevronRight, Volume2, Download } from "lucide-react"
+import { jsPDF } from "jspdf"
+import { useState } from "react"
 
 export default function BasicLiteracyPage() {
+  const [pdfUrl, setPdfUrl] = useState<string | null>(null)
+  const [showPractice, setShowPractice] = useState(false) // toggle state
+
   const alphabetLetters = [
-    { letter: "ا", name: "Alif", sound: "/a/" },
-    { letter: "ب", name: "Ba", sound: "/b/" },
-    { letter: "ت", name: "Ta", sound: "/t/" },
-    { letter: "ث", name: "Tha", sound: "/θ/" },
-    { letter: "ج", name: "Jim", sound: "/dʒ/" },
-    { letter: "ح", name: "Ha", sound: "/ħ/" },
-    { letter: "خ", name: "Kha", sound: "/x/" },
-    { letter: "د", name: "Dal", sound: "/d/" },
-    { letter: "ذ", name: "Dhal", sound: "/ð/" },
-    { letter: "ر", name: "Ra", sound: "/r/" },
-    { letter: "ز", name: "Zay", sound: "/z/" },
-    { letter: "س", name: "Sin", sound: "/s/" },
-    { letter: "ش", name: "Shin", sound: "/ʃ/" },
-    { letter: "ص", name: "Sad", sound: "/sˤ/" },
-    { letter: "ض", name: "Dad", sound: "/dˤ/" },
-    { letter: "ط", name: "Ta", sound: "/tˤ/" },
-    { letter: "ظ", name: "Za", sound: "/ðˤ/" },
-    { letter: "ع", name: "Ain", sound: "/ʕ/" },
-    { letter: "غ", name: "Ghain", sound: "/ɣ/" },
-    { letter: "ف", name: "Fa", sound: "/f/" },
-    { letter: "ق", name: "Qaf", sound: "/q/" },
-    { letter: "ك", name: "Kaf", sound: "/k/" },
-    { letter: "ل", name: "Lam", sound: "/l/" },
-    { letter: "م", name: "Mim", sound: "/m/" },
-    { letter: "ن", name: "Nun", sound: "/n/" },
-    { letter: "ه", name: "Ha", sound: "/h/" },
-    { letter: "و", name: "Waw", sound: "/w/" },
-    { letter: "ي", name: "Ya", sound: "/j/" },
-  ]
+    { letter: "A a", name: "a", sound: "/a/" },
+    { letter: "Ạ ạ", name: "ạ", sound: "/ə/" },
+    { letter: "B b", name: "ba", sound: "/b/" },
+    { letter: "D d", name: "da", sound: "/d/" },
+    { letter: "E e", name: "e", sound: "/ɛ/" },
+    { letter: "F f", name: "fa", sound: "/f, ɸ/" },
+    { letter: "G g", name: "ga", sound: "/g/" },
+    { letter: "H h", name: "ha", sound: "/h/" },
+    { letter: "I i", name: "i", sound: "/i/" },
+    { letter: "Ị ị", name: "ị", sound: "/i, ɨ/" },
+    { letter: "J j", name: "ja", sound: "/ʤ/" },
+    { letter: "K k", name: "ka", sound: "/k/" },
+    { letter: "L l", name: "la", sound: "/l/" },
+    { letter: "M m", name: "ma", sound: "/m/" },
+    { letter: "N n", name: "na", sound: "/n/" },
+    { letter: "Ɲ ɲ", name: "ɲa", sound: "/ɲ/" },
+    { letter: "Ny ny", name: "nya", sound: "/ɲ/" },
+    { letter: "O o", name: "o", sound: "/o/" },
+    { letter: "P p", name: "pa", sound: "/p/" },
+    { letter: "R r", name: "ra", sound: "/r/" },
+    { letter: "S s", name: "sa", sound: "/s/" },
+    { letter: "T t", name: "ta", sound: "/t/" },
+    { letter: "U u", name: "u", sound: "/u/" },
+    { letter: "Ụ ụ", name: "ụ", sound: "/ʊ/" },
+    { letter: "W w", name: "wa", sound: "/w/" },
+    { letter: "Y y", name: "ya", sound: "/j/" },
+    { letter: "Z z", name: "za", sound: "/z/" }
+  ];
 
   const basicWords = [
     { fur: "سلام", english: "Peace/Hello", pronunciation: "salaam" },
@@ -47,6 +52,89 @@ export default function BasicLiteracyPage() {
     { fur: "بنت", english: "Girl", pronunciation: "bint" },
     { fur: "كتاب", english: "Book", pronunciation: "kitaab" },
   ]
+
+  const tones = [
+    { letter: "á", name: "High Tone", sound: "˥" },
+    { letter: "a", name: "Low Tone", sound: "˩" },
+    { letter: "â", name: "Falling Tone", sound: "˥˩" },
+    { letter: "ǎ", name: "Rising Tone", sound: "˩˥" },
+    { letter: "áa", name: "High-Low Tone", sound: "˥˩" },
+    { letter: "aá", name: "Low-High Tone", sound: "˩˥" },
+    { letter: "aâ", name: "Low + High-Low Tone", sound: "˩˥˩" },
+    { letter: "é", name: "High Tone", sound: "˥" },
+    { letter: "e", name: "Low Tone", sound: "˩" },
+    { letter: "ê", name: "Falling Tone", sound: "˥˩" },
+    { letter: "ě", name: "Rising Tone", sound: "˩˥" },
+    { letter: "éé", name: "High-Low Tone", sound: "˥˩" },
+    { letter: "eé", name: "Low-High Tone", sound: "˩˥" },
+    { letter: "eê", name: "Low + High-Low Tone", sound: "˩˥˩" },
+    { letter: "í", name: "High Tone", sound: "˥" },
+    { letter: "i", name: "Low Tone", sound: "˩" },
+    { letter: "î", name: "Falling Tone", sound: "˥˩" },
+    { letter: "ǐ", name: "Rising Tone", sound: "˩˥" },
+    { letter: "íi", name: "High-Low Tone", sound: "˥˩" },
+    { letter: "ií", name: "Low-High Tone", sound: "˩˥" },
+    { letter: "iî", name: "Low + High-Low Tone", sound: "˩˥˩" },
+    { letter: "ó", name: "High Tone", sound: "˥" },
+    { letter: "o", name: "Low Tone", sound: "˩" },
+    { letter: "ô", name: "Falling Tone", sound: "˥˩" },
+    { letter: "ǒ", name: "Rising Tone", sound: "˩˥" },
+    { letter: "óo", name: "High-Low Tone", sound: "˥˩" },
+    { letter: "oó", name: "Low-High Tone", sound: "˩˥" },
+    { letter: "oô", name: "Low + High-Low Tone", sound: "˩˥˩" },
+    { letter: "ú", name: "High Tone", sound: "˥" },
+    { letter: "u", name: "Low Tone", sound: "˩" },
+    { letter: "û", name: "Falling Tone", sound: "˥˩" },
+    { letter: "ǔ", name: "Rising Tone", sound: "˩˥" },
+    { letter: "úu", name: "High-Low Tone", sound: "˥˩" },
+    { letter: "uú", name: "Low-High Tone", sound: "˩˥" },
+    { letter: "uû", name: "Low + High-Low Tone", sound: "˩˥˩" }
+  ];
+
+  // Utility: build PDF (shared between preview & download)
+  const buildPDF = () => {
+    const doc = new jsPDF()
+
+    // Title Page
+    doc.setFontSize(20)
+    doc.text("📖 Basic Literacy Materials", 20, 20)
+    doc.setFontSize(12)
+    doc.text("Fur Alphabet • Vocabulary", 20, 30)
+    doc.addPage()
+
+    // Alphabet
+    doc.setFontSize(16)
+    doc.text("Fur Alphabet", 20, 20)
+    doc.setFontSize(12)
+    alphabetLetters.forEach((item, i) => {
+      doc.text(`${item.letter} - ${item.name} (${item.sound})`, 20, 40 + i * 8)
+    })
+    doc.addPage()
+
+    // Vocabulary
+    doc.setFontSize(16)
+    doc.text("Essential Vocabulary", 20, 20)
+    doc.setFontSize(12)
+    basicWords.forEach((w, i) => {
+      doc.text(`${w.fur}  =  ${w.english}  /${w.pronunciation}/`, 20, 40 + i * 8)
+    })
+
+    return doc
+  }
+
+  // Generate Preview
+  const generatePDFPreview = () => {
+    const doc = buildPDF()
+    const pdfBlob = doc.output("blob")
+    const pdfUrl = URL.createObjectURL(pdfBlob)
+    setPdfUrl(pdfUrl)
+  }
+
+  // Download PDF
+  const downloadPDF = () => {
+    const doc = buildPDF()
+    doc.save("basic-literacy.pdf")
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -67,25 +155,26 @@ export default function BasicLiteracyPage() {
           </p>
         </div>
 
-        {/* Progress Tracker */}
-        <div className="bg-white rounded-lg shadow-sm border p-6 mb-8">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-semibold text-gray-900">Your Progress</h2>
-            <span className="text-sm text-gray-600">3 of 25 lessons completed</span>
-          </div>
-          <div className="w-full bg-gray-200 rounded-full h-2">
-            <div className="bg-teal-700 h-2 rounded-full" style={{ width: "12%" }}></div>
-          </div>
-        </div>
-
         {/* Fur Alphabet Section */}
         <div className="bg-white rounded-lg shadow-sm border p-8 mb-8">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-2xl font-bold text-gray-900">Fur Alphabet</h2>
-            <button className="flex items-center text-teal-700 hover:text-teal-800">
-              <Download className="w-4 h-4 mr-2" />
-              Download Chart
-            </button>
+            <div className="flex space-x-4">
+              <button
+                onClick={generatePDFPreview}
+                className="flex items-center text-teal-700 hover:text-teal-800"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Preview PDF
+              </button>
+              <button
+                onClick={downloadPDF}
+                className="flex items-center text-teal-700 hover:text-teal-800"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                Download PDF
+              </button>
+            </div>
           </div>
 
           <div className="grid grid-cols-4 md:grid-cols-7 lg:grid-cols-14 gap-4 mb-6">
@@ -102,10 +191,24 @@ export default function BasicLiteracyPage() {
           </div>
 
           <div className="text-center">
-            <button className="bg-teal-700 text-white px-6 py-2 rounded-lg hover:bg-teal-800 transition-colors">
-              Practice Alphabet
+            <button
+              onClick={() => setShowPractice(!showPractice)}
+              className="bg-teal-700 text-white px-6 py-2 rounded-lg hover:bg-teal-800 transition-colors"
+            >
+              {showPractice ? "Close Practice" : "Practice Alphabet"}
             </button>
           </div>
+
+          {showPractice && (
+            <div className="mt-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">✍️ Practice Here</h3>
+              <textarea
+                rows={8}
+                placeholder="Write your alphabet practice here..."
+                className="w-full p-4 border rounded-lg bg-yellow-50 focus:ring-2 focus:ring-teal-700 focus:outline-none font-mono"
+              ></textarea>
+            </div>
+          )}
         </div>
 
         {/* Basic Vocabulary */}
@@ -128,63 +231,43 @@ export default function BasicLiteracyPage() {
           </div>
         </div>
 
-        {/* Lesson Modules */}
-        <div className="bg-white rounded-lg shadow-sm border p-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Learning Modules</h2>
-
-          <div className="space-y-4">
-            <div className="flex items-center p-4 border rounded-lg bg-green-50 border-green-200">
-              <CheckCircle className="w-6 h-6 text-green-600 mr-4" />
-              <div className="flex-1">
-                <h4 className="font-semibold text-gray-900">Module 1: Alphabet Recognition</h4>
-                <p className="text-sm text-gray-600">Learn to identify and pronounce all Fur letters</p>
-              </div>
-              <span className="text-sm text-green-600 font-medium">Completed</span>
-            </div>
-
-            <div className="flex items-center p-4 border rounded-lg bg-green-50 border-green-200">
-              <CheckCircle className="w-6 h-6 text-green-600 mr-4" />
-              <div className="flex-1">
-                <h4 className="font-semibold text-gray-900">Module 2: Basic Sounds</h4>
-                <p className="text-sm text-gray-600">Practice letter sounds and combinations</p>
-              </div>
-              <span className="text-sm text-green-600 font-medium">Completed</span>
-            </div>
-
-            <div className="flex items-center p-4 border rounded-lg bg-blue-50 border-blue-200">
-              <div className="w-6 h-6 bg-blue-600 text-white rounded-full flex items-center justify-center mr-4 text-sm font-bold">
-                3
-              </div>
-              <div className="flex-1">
-                <h4 className="font-semibold text-gray-900">Module 3: First Words</h4>
-                <p className="text-sm text-gray-600">Learn your first 20 Fur words</p>
-              </div>
-              <button className="text-blue-600 font-medium hover:underline">Continue →</button>
-            </div>
-
-            <div className="flex items-center p-4 border rounded-lg">
-              <div className="w-6 h-6 bg-gray-300 text-white rounded-full flex items-center justify-center mr-4 text-sm font-bold">
-                4
-              </div>
-              <div className="flex-1">
-                <h4 className="font-semibold text-gray-900">Module 4: Simple Sentences</h4>
-                <p className="text-sm text-gray-600">Construct basic sentences in Fur</p>
-              </div>
-              <span className="text-sm text-gray-400">Locked</span>
-            </div>
-
-            <div className="flex items-center p-4 border rounded-lg">
-              <div className="w-6 h-6 bg-gray-300 text-white rounded-full flex items-center justify-center mr-4 text-sm font-bold">
-                5
-              </div>
-              <div className="flex-1">
-                <h4 className="font-semibold text-gray-900">Module 5: Reading Practice</h4>
-                <p className="text-sm text-gray-600">Read simple texts and stories</p>
-              </div>
-              <span className="text-sm text-gray-400">Locked</span>
-            </div>
+        {/* Tone Chart */}
+        <div className="bg-white rounded-lg shadow-sm border p-8 mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Tone Chart</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full border-collapse border border-gray-200">
+              <thead className="bg-teal-700 text-white">
+                <tr>
+                  <th className="py-3 px-4 text-left">Letter</th>
+                  <th className="py-3 px-4 text-left">Tone Name</th>
+                  <th className="py-3 px-4 text-left">IPA Sound</th>
+                </tr>
+              </thead>
+              <tbody>
+                {tones.map((tone, index) => (
+                  <tr key={index} className={index % 2 === 0 ? "bg-gray-50" : "bg-white"}>
+                    <td className="py-3 px-4 font-bold text-lg">{tone.letter}</td>
+                    <td className="py-3 px-4">{tone.name}</td>
+                    <td className="py-3 px-4">{tone.sound}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </div>
+
+        {/* PDF Viewer Section */}
+        {pdfUrl && (
+          <div className="bg-white rounded-lg shadow-sm border p-8">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">📑 View Generated PDF</h2>
+            <iframe
+              src={pdfUrl}
+              width="100%"
+              height="600px"
+              className="border rounded-lg"
+            ></iframe>
+          </div>
+        )}
       </main>
     </div>
   )
