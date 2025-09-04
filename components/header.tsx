@@ -98,7 +98,8 @@ export function Header() {
       dropdownItems: [
         { name: t("home.literacy.title"), href: "/literacy-materials/basic" },
         { name: t("home.videos.title"), href: "/literacy-materials/videos" },
-        { name: t("nav.literacy_nav"), href: "/literacy-materials/advanced" },
+        { name: t("nav.literacy_nav"), href: "/literacy" },
+        { name: t("our_heritage"), href: "https://soba-delta.vercel.app" },
       ],
     },
     { name: t("nav.newsletters"), href: "/newsletters" },
@@ -114,8 +115,9 @@ export function Header() {
       hasDropdown: true,
       dropdownItems: [
         { name: t("nav.gallery") + " - Photos", href: "/gallery/photos" },
-        { name: t("nav.gallery") + " - Videos", href: "/gallery/videos" },
+        { name: t("nav.gallery") + " - Videos", href: "/videos" },
         { name: t("nav.gallery") + " - Audio", href: "/gallery/audio" },
+        { name: t("nav.gallery") + " - Staff", href: "/staff" },
       ],
     },
   ]

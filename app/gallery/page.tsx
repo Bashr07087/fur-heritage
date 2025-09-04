@@ -22,7 +22,7 @@ export default function GalleryPage() {
       location: "Nyala, South Darfur",
       likes: 245,
       views: 1520,
-      image: "/fur-embroidered-wedding-dress.png",
+      image: "/images/fur-harvest-festival-dance.png",
     },
     {
       title: "Harvest Festival Celebration",
@@ -45,7 +45,7 @@ export default function GalleryPage() {
       location: "Fur Sultanate Ruins",
       likes: 156,
       views: 980,
-      image: "/fur-architecture.png",
+      image: "/images/fur-traditional-music.png",
     },
     {
       title: "Handwoven Baskets",
