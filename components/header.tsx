@@ -31,75 +31,64 @@ export function Header() {
   const [user, setUser] = useState<any>(null)
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null)
   const [loading, setLoading] = useState(true)
-  const [isSupabaseConfigured, setIsSupabaseConfigured] = useState(false)
 
+  // Initialize Supabase and get user
   useEffect(() => {
     const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
     const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 
     if (!supabaseUrl || !supabaseAnonKey) {
-      console.log("[v0] Supabase not configured - running in frontend-only mode")
-      setIsSupabaseConfigured(false)
+      console.warn("[Header] Supabase not configured")
       setLoading(false)
       return
     }
 
-    setIsSupabaseConfigured(true)
+    const supabase = createClient()
 
-    try {
-      const supabase = createClient()
+    const fetchUser = async () => {
+      try {
+        const {
+          data: { user },
+        } = await supabase.auth.getUser()
+        setUser(user)
 
-      const getUser = async () => {
-        try {
-          const {
-            data: { user },
-          } = await supabase.auth.getUser()
-          setUser(user)
-
-          if (user) {
-            const { data: profile } = await supabase
-              .from("user_profiles")
-              .select("*")
-              .eq("id", user.id)
-              .single()
-            setUserProfile(profile)
-          }
-        } catch (error) {
-          console.error("[v0] Error fetching user:", error)
+        if (user) {
+          const { data: profile } = await supabase
+            .from("user_profiles")
+            .select("*")
+            .eq("id", user.id)
+            .single()
+          setUserProfile(profile)
         }
+      } catch (err) {
+        console.error("[Header] Error fetching user:", err)
+      } finally {
         setLoading(false)
       }
-
-      getUser()
-
-      const { data: subscription } = supabase.auth.onAuthStateChange(async (_event, session) => {
-        setUser(session?.user ?? null)
-        if (session?.user) {
-          try {
-            const { data: profile } = await supabase
-              .from("user_profiles")
-              .select("*")
-              .eq("id", session.user.id)
-              .single()
-            setUserProfile(profile)
-          } catch (error) {
-            console.error("[v0] Error fetching user profile:", error)
-          }
-        } else {
-          setUserProfile(null)
-        }
-        setLoading(false)
-      })
-
-      return () => {
-        subscription?.subscription.unsubscribe()
-      }
-    } catch (error) {
-      console.error("[v0] Error initializing Supabase:", error)
-      setLoading(false)
     }
+
+    fetchUser()
+
+    const { data: subscription } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null)
+      setUserProfile(null)
+
+      if (session?.user) {
+        supabase
+          .from("user_profiles")
+          .select("*")
+          .eq("id", session.user.id)
+          .single()
+          .then(({ data }) => setUserProfile(data))
+          .catch((err) => console.error("[Header] Error fetching profile:", err))
+      }
+      setLoading(false)
+    })
+
+    return () => subscription?.subscription.unsubscribe()
   }, [])
 
+  // Navigation items
   const mainNavItems = [
     { name: t("nav.home"), href: "/" },
     {
@@ -107,9 +96,9 @@ export function Header() {
       href: "/literacy-materials",
       hasDropdown: true,
       dropdownItems: [
-        { name: "Basic Materials", href: "/literacy-materials/basic" },
-        { name: "Video Lessons", href: "/literacy-materials/videos" },
-        { name: "Advanced Materials", href: "/literacy-materials/advanced" },
+        { name: t("home.literacy.title"), href: "/literacy-materials/basic" },
+        { name: t("home.videos.title"), href: "/literacy-materials/videos" },
+        { name: t("nav.literacy_nav"), href: "/literacy-materials/advanced" },
       ],
     },
     { name: t("nav.newsletters"), href: "/newsletters" },
@@ -117,7 +106,6 @@ export function Header() {
     { name: t("nav.linguistic"), href: "/linguistic" },
     { name: t("nav.dictionary"), href: "https://v0-language-flame.vercel.app" },
     { name: t("nav.poems"), href: "/poems" },
-    { name: t("nav.literacy_nav"), href: "/literacy" },
     { name: t("nav.calendar"), href: "/calendar" },
     { name: t("nav.videos"), href: "/videos" },
     {
@@ -125,9 +113,9 @@ export function Header() {
       href: "/gallery",
       hasDropdown: true,
       dropdownItems: [
-        { name: "Photo Gallery", href: "/gallery/photos" },
-        { name: "Video Gallery", href: "/gallery/videos" },
-        { name: "Audio Gallery", href: "/gallery/audio" },
+        { name: t("nav.gallery") + " - Photos", href: "/gallery/photos" },
+        { name: t("nav.gallery") + " - Videos", href: "/gallery/videos" },
+        { name: t("nav.gallery") + " - Audio", href: "/gallery/audio" },
       ],
     },
   ]
@@ -140,11 +128,7 @@ export function Header() {
       super_admin: "bg-blue-400 text-blue-950",
     }
     return (
-      <span
-        className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-          roleColors[role] || roleColors.student
-        }`}
-      >
+      <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${roleColors[role] || roleColors.student}`}>
         {role.replace("_", " ").toUpperCase()}
       </span>
     )
@@ -152,14 +136,10 @@ export function Header() {
 
   return (
     <header className="bg-blue-700 text-white">
-      {/* Main Header */}
       <div className="px-6 py-4">
         <div className={`flex items-center justify-between ${isRTL ? "flex-row-reverse" : ""}`}>
-          {/* Logo and Title */}
-          <Link
-            href="/"
-            className="flex items-center gap-4 hover:opacity-90 transition-opacity"
-          >
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-4 hover:opacity-90 transition-opacity">
             <div className="w-12 h-12 relative">
               <Image
                 src="/images/fur-official-logo.png"
@@ -174,24 +154,22 @@ export function Header() {
             </div>
           </Link>
 
+          {/* Right side */}
           <div className={`flex items-center gap-4 ${isRTL ? "flex-row-reverse" : ""}`}>
-            {/* User Menu or Auth Buttons */}
+            {/* User Menu */}
             {loading ? (
               <div className="w-8 h-8 bg-blue-600 rounded-full animate-pulse" />
-            ) : isSupabaseConfigured && user && userProfile ? (
+            ) : user && userProfile ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="text-white hover:bg-blue-600 gap-2">
                     <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center">
                       <span className="text-sm font-semibold">
-                        {userProfile.full_name?.charAt(0) ||
-                          userProfile.email.charAt(0).toUpperCase()}
+                        {userProfile.full_name?.charAt(0) || userProfile.email.charAt(0).toUpperCase()}
                       </span>
                     </div>
                     <div className="text-left">
-                      <div className="text-sm font-medium">
-                        {userProfile.full_name || "User"}
-                      </div>
+                      <div className="text-sm font-medium">{userProfile.full_name || "User"}</div>
                       {getRoleBadge(userProfile.role)}
                     </div>
                     <ChevronDown className="w-4 h-4" />
@@ -199,24 +177,20 @@ export function Header() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56">
                   <div className="px-2 py-1.5">
-                    <p className="text-sm font-medium">
-                      {userProfile.full_name || "User"}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {userProfile.email}
-                    </p>
+                    <p className="text-sm font-medium">{userProfile.full_name || "User"}</p>
+                    <p className="text-xs text-muted-foreground">{userProfile.email}</p>
                   </div>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild>
                     <Link href="/profile">
                       <User className="w-4 h-4 mr-2" />
-                      Profile
+                      {t("nav.profile")}
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
                     <Link href="/settings">
                       <Settings className="w-4 h-4 mr-2" />
-                      Settings
+                      {t("nav.settings")}
                     </Link>
                   </DropdownMenuItem>
                   {["staff", "admin", "super_admin"].includes(userProfile.role) && (
@@ -225,52 +199,47 @@ export function Header() {
                       <DropdownMenuItem asChild>
                         <Link href="/admin">
                           <Settings className="w-4 h-4 mr-2" />
-                          Admin Dashboard
+                          {t("nav.admin")}
                         </Link>
                       </DropdownMenuItem>
                     </>
                   )}
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem
-                    onClick={() => signOut()}
-                    className="text-blue-600 focus:text-blue-600"
-                  >
+                  <DropdownMenuItem onClick={() => signOut()} className="text-blue-600 focus:text-blue-600">
                     <LogOut className="w-4 h-4 mr-2" />
-                    Sign Out
+                    {t("auth.logout")}
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
-            ) : isSupabaseConfigured ? (
+            ) : (
+              // Always show Sign In / Sign Up if no user
               <div className="flex items-center gap-2">
                 <Button variant="ghost" className="text-white hover:bg-blue-600" asChild>
-                  <Link href="/auth/login">Sign In</Link>
+                  <Link href="/auth/login">{t("auth.login")}</Link>
                 </Button>
-                <Button
-                  variant="outline"
-                  className="text-blue-700 bg-white hover:bg-gray-100"
-                  asChild
-                >
-                  <Link href="/auth/signup">Sign Up</Link>
+                <Button variant="outline" className="text-blue-700 bg-white hover:bg-gray-100" asChild>
+                  <Link href="/auth/signup">{t("auth.signup")}</Link>
                 </Button>
               </div>
-            ) : null}
+            )}
 
             {/* Language Selector */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" className="text-white hover:bg-blue-600 gap-2">
                   <Globe className="w-4 h-4" />
-                  {language === "ar" ? t("language.arabic") : t("language.english")}
+                  {language === "en"
+                    ? t("language.english")
+                    : language === "ar"
+                    ? t("language.arabic")
+                    : t("language.fur")}
                   <ChevronDown className="w-4 h-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => setLanguage("en")}>
-                  {t("language.english")}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setLanguage("ar")}>
-                  {t("language.arabic")}
-                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLanguage("en")}>{t("language.english")}</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLanguage("ar")}>{t("language.arabic")}</DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setLanguage("fur")}>{t("language.fur")}</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -278,11 +247,7 @@ export function Header() {
 
         {/* Main Navigation */}
         <nav className="mt-6">
-          <div
-            className={`flex items-center gap-6 flex-wrap ${
-              isRTL ? "flex-row-reverse" : ""
-            }`}
-          >
+          <div className={`flex items-center gap-6 flex-wrap ${isRTL ? "flex-row-reverse" : ""}`}>
             {mainNavItems.map((item) => (
               <div key={item.name} className="relative">
                 {item.hasDropdown ? (
@@ -309,7 +274,6 @@ export function Header() {
               </div>
             ))}
 
-            {/* Search Icon */}
             <Button variant="ghost" size="icon" className="text-white hover:bg-blue-600">
               <Search className="w-5 h-5" />
             </Button>

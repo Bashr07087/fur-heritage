@@ -2,7 +2,7 @@
 
 import { createContext, useContext, useState, useEffect, type ReactNode } from "react"
 
-type Language = "en" | "ar"
+type Language = "en" | "ar" | "fur"
 
 interface LanguageContextType {
   language: Language
@@ -13,50 +13,54 @@ interface LanguageContextType {
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined)
 
-// Store translations in memory
+// In-memory translations
 const translationsCache: Record<Language, Record<string, string>> = {
   en: {},
   ar: {},
+  fur: {},
 }
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [language, setLanguage] = useState<Language>("en")
   const [translationsLoaded, setTranslationsLoaded] = useState(false)
 
-  // Load translations
+  // Load translations dynamically
   useEffect(() => {
     const loadTranslations = async () => {
       try {
-        const [enTranslations, arTranslations] = await Promise.all([
+        const [enTranslations, arTranslations, furTranslations] = await Promise.all([
           import("./translations/en.json"),
           import("./translations/ar.json"),
+          import("./translations/fur.json"),
         ])
 
         translationsCache.en = enTranslations.default
         translationsCache.ar = arTranslations.default
+        translationsCache.fur = furTranslations.default
+
         setTranslationsLoaded(true)
       } catch (error) {
         console.error("Failed to load translations:", error)
-        setTranslationsLoaded(true) // Still set to true to prevent infinite loading
+        setTranslationsLoaded(true) // avoid infinite loading
       }
     }
 
     loadTranslations()
   }, [])
 
+  // Load saved language from localStorage on mount
   useEffect(() => {
-    // Load saved language from localStorage
     const saved = localStorage.getItem("language") as Language
-    if (saved && (saved === "en" || saved === "ar")) {
+    if (saved && ["en", "ar", "fur"].includes(saved)) {
       setLanguage(saved)
     }
   }, [])
 
+  // Update localStorage and document attributes on language change
   useEffect(() => {
-    // Save language to localStorage and update document direction
     localStorage.setItem("language", language)
-    document.documentElement.dir = language === "ar" ? "rtl" : "ltr"
     document.documentElement.lang = language
+    document.documentElement.dir = language === "ar" ? "rtl" : "ltr"
   }, [language])
 
   const t = (key: string): string => {
@@ -66,7 +70,11 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   const isRTL = language === "ar"
 
-  return <LanguageContext.Provider value={{ language, setLanguage, t, isRTL }}>{children}</LanguageContext.Provider>
+  return (
+    <LanguageContext.Provider value={{ language, setLanguage, t, isRTL }}>
+      {children}
+    </LanguageContext.Provider>
+  )
 }
 
 export function useLanguage() {
@@ -77,8 +85,8 @@ export function useLanguage() {
   return context
 }
 
-// Translation function
+// Helper to fetch translation with fallback
 function getTranslation(key: string, language: Language): string {
   const translations = translationsCache[language] || {}
-  return translations[key] || key
+  return translations[key] || translationsCache.en[key] || key
 }
