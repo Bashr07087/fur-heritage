@@ -16,6 +16,7 @@
   "nav.settings": "الإعدادات",
   "nav.admin": "لوحة الإدارة",
   "nav.staff": "لوحة الموظفين",
+
   "auth.login": "تسجيل الدخول",
   "auth.signup": "إنشاء حساب",
   "auth.logout": "تسجيل الخروج",
@@ -27,6 +28,7 @@
   "auth.forgot_password": "نسيت كلمة المرور؟",
   "auth.no_account": "ليس لديك حساب؟",
   "auth.have_account": "لديك حساب بالفعل؟",
+
   "home.welcome": "مرحباً بكم في لغة وثقافة الفور",
   "home.description": "اكتشف التراث الغني للغة الفور من خلال منصة التعلم الشاملة لدينا. احصل على مواد محو الأمية والمحتوى الثقافي والموارد التعليمية المصممة للحفاظ على لغة وتقاليد الفور وتعزيزها.",
   "home.get_started": "ابدأ الآن",
@@ -41,8 +43,10 @@
   "home.videos.description": "دروس تفاعلية ووثائقيات ثقافية",
   "home.begin_literacy": "ابدأ بمحو الأمية الأساسية",
   "home.explore_all": "استكشف جميع الموارد",
+
   "language.english": "English",
   "language.arabic": "العربية",
+
   "common.search": "بحث",
   "common.loading": "جاري التحميل...",
   "common.save": "حفظ",
@@ -53,23 +57,45 @@
   "common.back": "رجوع",
   "common.next": "التالي",
   "common.previous": "السابق",
+
   "literacy.title": "برامج محو الأمية",
   "literacy.adult_program": "برنامج محو الأمية للكبار",
   "literacy.child_program": "برنامج محو الأمية للأطفال",
   "literacy.community_circles": "دوائر القراءة المجتمعية",
+
   "dictionary.title": "قاموس الفور-الإنجليزية",
   "dictionary.search_placeholder": "البحث عن الكلمات...",
+
   "poems.title": "الشعر التقليدي للفور",
   "poems.folk_tales": "الحكايات الشعبية والقصص",
+
   "videos.title": "الفيديوهات التعليمية",
   "videos.language_lessons": "دروس اللغة",
   "videos.cultural_content": "المحتوى الثقافي",
+
   "admin.users": "إدارة المستخدمين",
   "admin.content": "إدارة المحتوى",
   "admin.analytics": "التحليلات",
   "admin.settings": "إعدادات الموقع",
+
   "role.user": "مستخدم",
   "role.staff": "موظف",
   "role.admin": "مدير",
-  "role.super_admin": "مدير عام"
+  "role.super_admin": "مدير عام",
+
+  "grammar.pageTitle": "نظرة شاملة على قواعد اللغة",
+  "grammar.phonology.title": "علم الأصوات (أصوات اللغة)",
+  "grammar.phonology.description": "يتناول الأصوات (الفونيمات)، قواعد النطق، النبر، النغمة، والتنغيم.",
+  "grammar.morphology.title": "علم الصرف (بنية الكلمة)",
+  "grammar.morphology.description": "كيفية بناء الكلمات من المورفيمات، بما في ذلك التصريف والاشتقاق.",
+  "grammar.syntax.title": "النحو (بنية الجملة)",
+  "grammar.syntax.description": "قواعد ترتيب الكلمات، تكوين العبارات، وأنماط المطابقة.",
+  "grammar.semantics.title": "علم الدلالة (المعنى)",
+  "grammar.semantics.description": "كيف تنقل الكلمات والجمل المعنى، الغموض، والتفسير.",
+  "grammar.pragmatics.title": "علم التداوليات (السياق والاستخدام)",
+  "grammar.pragmatics.description": "كيف يتغير المعنى بالسياق، المجاملة، والمعاني الضمنية.",
+  "grammar.lexicon.title": "المعجم (المفردات)",
+  "grammar.lexicon.description": "قاموس اللغة: الكلمات، التعابير الاصطلاحية، والتعابير الثابتة.",
+  "grammar.orthography.title": "الإملاء (نظام الكتابة)",
+  "grammar.orthography.description": "يتناول الأبجدية، قواعد الكتابة، علامات الترقيم، والإملاء."
 }

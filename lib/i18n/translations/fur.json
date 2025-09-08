@@ -83,5 +83,23 @@
   "role.admin": "Kuri",
   "role.super_admin": "kuri appâ",
   "Ta̱bʉ́ŋ": "التالي",
-  "ka̱rɨ kʉŋo": "السابق"
+  "ka̱rɨ kʉŋo": "السابق",
+  "grammar.pageTitle": "Grammar Daraŋ",
+  "grammar.phonology.title": "Phonology (Daraŋ Suroŋ)",
+  "grammar.phonology.description": "Daraŋ phoneme, suroŋ ga naŋ, stress, tone ka intonation.",
+  "grammar.morphology.title": "Morphology (Kalma Daraŋ)",
+  "grammar.morphology.description": "Kalma daŋ morpheme seŋ, inflection ka derivation.",
+  "grammar.syntax.title": "Syntax (Jumla Daraŋ)",
+  "grammar.syntax.description": "Subject–Verb–Object order, phrase ka clause daraŋ.",
+  "grammar.semantics.title": "Semantics (Ma’na Daraŋ)",
+  "grammar.semantics.description": "Kalma ka jumla ma’na, ambiguity ka interpretation.",
+  "grammar.pragmatics.title": "Pragmatics (Sukut ka Fara)",
+  "grammar.pragmatics.description": "Ma’na sukut seŋ badil, polite ka implicit meaning.",
+  "grammar.lexicon.title": "Lexicon (Kalma Daftar)",
+  "grammar.lexicon.description": "Kalma daftar: idioms ka fixed expression.",
+  "grammar.orthography.title": "Orthography (Sahifa Daraŋ)",
+  "grammar.orthography.description": "Alphabet, script, punctuation ka spelling."
 }
+
+  
+

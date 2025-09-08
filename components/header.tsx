@@ -102,6 +102,7 @@ export function Header() {
         { name: t("our_heritage"), href: "https://soba-delta.vercel.app" },
       ],
     },
+    { name: "Grammar", href: "/rule" },   // ✅ Added here as a top-level nav item
     { name: t("nav.newsletters"), href: "/newsletters" },
     { name: t("nav.wikipedia"), href: "https://en.wikipedia.org/wiki/Fur_language" },
     { name: t("nav.linguistic"), href: "/linguistic" },
@@ -285,3 +286,5 @@ export function Header() {
     </header>
   )
 }
+
+
