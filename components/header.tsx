@@ -115,9 +115,9 @@ export function Header() {
       href: "/gallery",
       hasDropdown: true,
       dropdownItems: [
-        { name: t("nav.gallery") + " - Photos", href: "/gallery/photos" },
+        { name: t("nav.gallery") + " - Photos", href: "/picture_gallery" },
         { name: t("nav.gallery") + " - Videos", href: "/videos" },
-        { name: t("nav.gallery") + " - Audio", href: "/gallery/audio" },
+        { name: t("nav.gallery") + " - audio", href: "/audio" },
         { name: t("nav.gallery") + " - Staff", href: "/staff" },
       ],
     },
@@ -146,7 +146,7 @@ export function Header() {
             <div className="w-12 h-12 relative">
               <Image
                 src="/images/fur-official-logo.png"
-                alt="Iya'ŋ Dáálí - Fur Language and Culture Logo"
+                alt="Iya'ŋ Dáálí - 4L&C"
                 width={48}
                 height={48}
                 className="rounded-full object-cover"

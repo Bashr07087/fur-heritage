@@ -60,14 +60,14 @@ export default function HomePage() {
       list: []
     }
   ]
-
+  
   // Footer links
   const footerLinks = [
-    { href: "mailto:your-email@example.com", icon: Mail },
-    { href: "tel:+123456789", icon: Phone },
-    { href: "https://github.com/yourprofile", icon: Github },
-    { href: "https://facebook.com", icon: Facebook },
-    { href: "https://twitter.com", icon: Twitter }
+    { href: "mailto:omersoba@gmail.com", icon: Mail },
+    { href: "tel:+16059372442", icon: Phone },   // better without spaces
+    { href: "https://github.com/Bashr07087", icon: Github },
+    { href: "https://www.facebook.com/omersoba.soba", icon: Facebook },
+    { href: "https://x.com/5d4f5182da7243d?s=11&t=Jkn7nC8bMeBoJ0XoikEW2w", icon: Twitter }
   ]
 
   return (
@@ -134,7 +134,7 @@ export default function HomePage() {
       <footer className="bg-gray-900 text-gray-300 py-8 mt-12">
         <div className="container mx-auto px-6 flex flex-col sm:flex-row items-center justify-between">
           <p className="text-sm">
-            &copy; {new Date().getFullYear()} {t("site.title")}. {t("common.rights_reserved")}
+            &copy; {new Date().getFullYear()} {t("site.title")}            {t("Our Contacts")}
           </p>
           <div className="flex space-x-6 mt-4 sm:mt-0">
             {footerLinks.map((link, idx) => (

@@ -6,7 +6,7 @@ import "./globals.css"
 import { LanguageProvider } from "@/lib/i18n/context"
 
 export const metadata: Metadata = {
-  title: "Fur Language and Culture",
+  title: "4L&C",
   description: "Learn and preserve the Fur language through comprehensive educational resources",
   generator: "v0.app",
 }
