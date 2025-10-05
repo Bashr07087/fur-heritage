@@ -266,5 +266,11 @@ export default function VideosPage() {
         )}
       </main>
     </div>
+    
   )
+  
 }
+<br>
+< a href="/video"> click to see out the videos</a>
+</br>
+ 

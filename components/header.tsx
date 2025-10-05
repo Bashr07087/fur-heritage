@@ -106,7 +106,7 @@ export function Header() {
     { name: t("nav.newsletters"), href: "/newsletters" },
     { name: t("nav.wikipedia"), href: "https://en.wikipedia.org/wiki/Fur_language" },
     { name: t("nav.linguistic"), href: "/linguistic" },
-    { name: t("nav.dictionary"), href: "https://v0-language-flame.vercel.app" },
+    { name: t("nav.dictionary"), href: "https://bashr07087.github.io/dictionary/" },
     { name: t("nav.poems"), href: "/poems" },
     { name: t("nav.calendar"), href: "/calendar" },
     { name: t("nav.videos"), href: "/videos" },

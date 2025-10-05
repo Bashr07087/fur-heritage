@@ -62,7 +62,7 @@ export default function PicturesPage() {
       { title: { en: "Traditional Costume", ar: "الزي التقليدي", fur: "Traditional Dress" }, url: "/images/costume.jpg" },
     ],
     community: [
-      { title: { en: "Village Gathering", ar: "تجمع القرية", fur: "Village Gathering" }, url: "/images/village.jpg" },
+      { title: { en: "Village Gathering", ar: "تجمع القرية", fur: "Village Gathering" }, url: "https://www.pooringbelenabulling.org/index.php/en/gallery/ww1-in-abo%EA%9E%8C%C5%8B-soom-juba-2015" },
       { title: { en: "Community Meeting", ar: "اجتماع المجتمع", fur: "Community Meeting" }, url: "/images/meeting.jpg" },
     ],
     nature: [
