@@ -100,6 +100,7 @@ export function Header() {
         { name: t("home.videos.title"), href: "/literacy-materials/videos" },
         { name: t("nav.literacy_nav"), href: "/literacy" },
         { name: t("our_heritage"), href: "https://soba-delta.vercel.app" },
+        { name: t("dictionary,writers,treachers,schools"), href: "https://foorangbeleengnyargap.netlify.app" },
       ],
     },
     { name: "Grammar", href: "/rule" },   // ✅ Added here as a top-level nav item
