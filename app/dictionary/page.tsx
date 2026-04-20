@@ -23,14 +23,11 @@ export default function DictionaryPage() {
   // ---------------------
   const dictionaryEntries: Entry[] = useMemo(
     () => [
-      { fur: "Jasi", english: "Disable", arabic: "تعطيل" },
-      { fur: "Magara", english: "Article", arabic: "مقال" },
+      { fur: "Ása", english: "dog", arabic:"كلب" },
+      { fur: "Dóga", english: "hen", arabic: "دجاجة" },   
       { fur: "Ee", english: "Yes", arabic: "نعم" },
-      { fur: "Saŋgala", english: "Pages", arabic: "الصفحات" },
-      { fur: "Rimmeŋ", english: "Register", arabic: "التسجيل" },
-      { fur: "Tááríŋá", english: "Operations", arabic: "عمليات" },
-      { fur: "Belé", english: "Language", arabic: "اللغة" },
-      { fur: "Jawar", english: "View", arabic: "عرض" }
+      { fur: "Biís", english: "cat", arabic: "قطة" }
+    
     ],
     []
   );
