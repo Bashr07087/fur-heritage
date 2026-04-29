@@ -23,11 +23,30 @@ export default function DictionaryPage() {
   // ---------------------
   const dictionaryEntries: Entry[] = useMemo(
     () => [
-      { fur: "Ása", english: "dog", arabic:"كلب" },
-      { fur: "Dóga", english: "hen", arabic: "دجاجة" },   
+      { fur: "Ása", english: "dog", arabic: "كلب" },
+      { fur: "Dóga", english: "hen", arabic: "دجاجة" },
       { fur: "Ee", english: "Yes", arabic: "نعم" },
-      { fur: "Biís", english: "cat", arabic: "قطة" }
-    
+      { fur: "Biís", english: "cat", arabic: "قطة" },
+      { fur: "Díg", english: "one", arabic: "واحد" },
+      { fur: "Ǎ̱w", english: "two", arabic: "اثنان" },
+      { fur: "Ɨ́ss", english: "three", arabic: "ثلاثة" },
+      { fur: "Óŋal", english: "four", arabic: "أربعة" },
+      { fur: "Óss", english: "five", arabic: "خمسة" },
+      { fur: "Ósaŋdíg", english: "six", arabic: "ستة" },
+      { fur: "Ósaŋǎ̱w", english: "seven", arabic: "سبعة" },
+      { fur: "Osaŋɨ́ss", english: "eight", arabic: "ثمانية" },
+      { fur: "Osaŋóŋal", english: "nine", arabic: "تسعة" },
+      { fur: "Wa̱yé", english: "ten", arabic: "عشرة" },
+      { fur: "Wa̱yé na díg", english: "eleven", arabic: "أحد عشر" },
+      { fur: "Wa̱yé na ǎ̱w", english: "twelve", arabic: "اثنا عشر" },
+      { fur: "Wa̱yé na Ɨ́ss", english: "thirteen", arabic: "ثلاثة عشر" },
+      { fur: "Wa̱yé na Óŋal", english: "fourteen", arabic: "أربعة عشر" },
+      { fur: "Wa̱yé na Óss", english: "fifteen", arabic: "خمسة عشر" },
+      { fur: "Wa̱yé na Ósaŋdíg", english: "sixteen", arabic: "ستة عشر" },
+      { fur: "Wa̱yé na Ósaŋǎ̱w", english: "seventeen", arabic: "سبعة عشر" },
+      { fur: "Wa̱yé na Osaŋɨ́ss", english: "eighteen", arabic: "ثمانية عشر" },
+      { fur: "Wa̱yé na Osaŋóŋal", english: "nineteen", arabic: "تسعة عشر" },
+      { fur: "Wa̱yé na Wa̱yé", english: "twenty", arabic: "عشرون" },
     ],
     []
   );
@@ -43,33 +62,33 @@ export default function DictionaryPage() {
     // Arabic diacritics
     out = out.replace(/[\u0610-\u061A\u064B-\u065F\u0670\u06D6-\u06ED]/g, "");
 
-    // Normalize quotes
-    out = out.replace(/[‘’‚‛`´]/g, "'");
+// Normalize quotes
+out = out.replace(/[‘’‚‛`´]/g, "'");
 
-    // ✅ Fur characters mapping
-    out = out
-      .replace(/ŋ/g, "n")
-      .replace(/ɨ/g, "i")
-      .replace(/ʉ/g, "u")
-      .replace(/ɛ/g, "e");
+// Fur characters mapping
+out = out
+  .replace(/Ɨ/g, "I")
+  .replace(/ɨ/g, "i")
+  .replace(/ŋ/g, "ng")
+  .replace(/ʉ/g, "u")
+  .replace(/ɛ/g, "e");
 
-    // Remove unwanted chars
-    out = out.replace(/[^0-9A-Za-z\u0600-\u06FF\s'-]/g, " ");
+// Remove unwanted chars
+out = out.replace(/[^0-9A-Za-z\u0600-\u06FF\s'-]/g, " ");
 
-    return out.replace(/\s+/g, " ").trim().toLowerCase();
-  }
+return out.replace(/\s+/g, " ").trim().toLowerCase();
+}
 
-  // ---------------------
-  // 🔥 AUDIO FILE NAME FIX
-  // ---------------------
-  function getAudioFileName(fur?: string) {
-    if (!fur) return "";
+// ---------------------
+// AUDIO FILE NAME FIX
+// ---------------------
+function getAudioFileName(fur?: string) {
+  if (!fur) return "";
 
-    return normalizeForMatch(fur)
-      .replace(/\s+/g, "") // remove spaces
-      .replace(/'/g, "");  // remove quotes
-  }
-
+  return normalizeForMatch(fur)
+    .replace(/\s+/g, "")
+    .replace(/'/g, "");
+}
   // ---------------------
   // SEARCH
   // ---------------------
